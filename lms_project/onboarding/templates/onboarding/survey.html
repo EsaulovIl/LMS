@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="survey-form-container">
+    <form method="post" class="survey-form" autocomplete="off">
+        {% csrf_token %}
+        <h1 class="survey-title">Регистрация</h1>
+
+        <div class="survey-step">
+            <label class="survey-label" for="id_target_score">
+                5. Какой балл ты планируешь набрать на экзамене?
+            </label>
+            <input type="number" name="target_score" min="0" max="100" id="id_target_score"
+                   value="{{ form.target_score.value|default_if_none:'' }}"
+                   class="survey-input" placeholder="Введите количество баллов от 0 до 100" required>
+            {% if form.target_score.errors %}
+            <div class="survey-error">{{ form.target_score.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="survey-step">
+            <label class="survey-label" for="id_weekly_hours">
+                6. Сколько часов в неделю ты планируешь уделять подготовке?
+            </label>
+            <input type="number" step="0.1" min="0" name="weekly_hours" id="id_weekly_hours"
+                   value="{{ form.weekly_hours.value|default_if_none:'' }}"
+                   class="survey-input" placeholder="Введите количество времени">
+            {% if form.weekly_hours.errors %}
+            <div class="survey-error">{{ form.weekly_hours.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="survey-step">
+            <label class="survey-label" for="id_exam_date">
+                7. В какую волну ты сдаёшь экзамен?
+            </label>
+            <select name="exam_date" id="id_exam_date"
+                    class="survey-input survey-select" required>
+                <option value="">Выберите вариант</option>
+                {# теперь итерируем по form.exam_date #}
+                {% for val, label in form.exam_date.field.choices %}
+                {% if val %}
+                <option value="{{ val }}" {% if form.exam_date.value|stringformat:"s" == val|stringformat:"s" %} selected {% endif %}> {{ label }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            {% if form.exam_date.errors %}
+            <div class="survey-error">{{ form.exam_date.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="survey-step">
+            <div class="survey-label">8. Какие темы тебе интересны?</div>
+            <div class="survey-table-wrap">
+                <table class="survey-table">
+                    <thead>
+                    <tr>
+                        <th>Задача</th>
+                        <th>Уже умею решать</th>
+                        <th>Хочу разбирать</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for opt in sections %}
+                    <tr>
+                        <td>{{ opt.text }}</td>
+                        <td>
+                            <input
+                                    type="checkbox"
+                                    name="know_sections"
+                                    value="{{ opt.pk }}"
+                                    id="id_know_{{ opt.pk }}">
+                        </td>
+                        <td>
+                            <input
+                                    type="checkbox"
+                                    name="want_sections"
+                                    value="{{ opt.pk }}"
+                                    id="id_want_{{ opt.pk }}">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button type="submit" class="survey-btn">Зарегистрироваться</button>
+    </form>
+</div>
+{% endblock %}

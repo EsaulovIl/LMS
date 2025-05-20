@@ -1,0 +1,180 @@
+.mentor-task-wrapper {
+    max-width: 760px;
+    margin: 0;
+    padding-bottom: 36px;
+}
+.mentor-header-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.mentor-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    margin-right: 2px;
+    transition: background .12s;
+}
+.mentor-back-btn:hover {
+    background: #e6f0ff;
+}
+.mentor-task-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0;
+    letter-spacing: -1px;
+}
+
+.mentor-task-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 2px 16px #a6c5e51a;
+    padding: 32px 32px 26px 32px;
+    margin-top: 16px;
+}
+.mentor-task-desc-block {
+    margin-bottom: 28px;
+}
+.mentor-task-ex-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 7px;
+}
+.mentor-task-ex-number {
+    font-size: 1.27em;
+    font-weight: 700;
+}
+.mentor-task-ex-id {
+    font-size: 1.01em;
+    color: #8293ab;
+}
+.mentor-task-exercise {
+    font-size: 1.13em;
+    margin-bottom: 16px;
+}
+
+.mentor-task-submission {
+    background: #f6f7fa;
+    border-radius: 14px;
+    padding: 13px 18px 10px 18px;
+    margin-bottom: 12px;
+}
+.mentor-submission-label {
+    font-weight: 600;
+    color: #3e4e64;
+    margin-bottom: 2px;
+    display: block;
+}
+.mentor-task-student-answer {
+    margin-bottom: 4px;
+    font-size: 1.08em;
+}
+.mentor-task-student-file {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 2px;
+}
+.mentor-task-file-link {
+    font-size: 0.97em;
+    color: #2196f3;
+    text-decoration: underline;
+    margin-left: 8px;
+}
+
+.mentor-task-alert {
+    padding: 9px 18px;
+    border-radius: 10px;
+    font-size: 1.04em;
+}
+.mentor-alert-info {
+    background: #e7f4ff;
+    color: #156ea1;
+}
+
+.mentor-task-criteria {
+    margin-top: 18px;
+    margin-bottom: 4px;
+}
+.mentor-criteria-label {
+    font-size: 1.05em;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+.mentor-criteria-img {
+    border-radius: 11px;
+    max-width: 100%;
+}
+
+.mentor-task-feedback-form {
+    border-top: 1px solid #dbeafe;
+    padding-top: 18px;
+    margin-top: 15px;
+}
+.mentor-task-feedback-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.mentor-task-file-row label,
+.mentor-task-grade-row label,
+.mentor-task-comment-row label {
+    font-size: 1.01em;
+    font-weight: 500;
+    margin-bottom: 3px;
+    display: block;
+}
+.mentor-task-file-row input[type=file] {
+    margin-top: 4px;
+}
+.mentor-task-grade-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.mentor-max-score {
+    font-size: 0.97em;
+    color: #9fb7d1;
+    margin-left: 2px;
+}
+.mentor-task-grade-row input[type=number] {
+    width: 70px;
+    padding: 5px 8px;
+    font-size: 1em;
+    border-radius: 6px;
+    border: 1px solid #cfe4f7;
+}
+.mentor-task-comment-row textarea {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #cfe4f7;
+    padding: 7px 10px;
+    font-size: 1em;
+    resize: vertical;
+    background: #f8fafd;
+}
+.mentor-task-feedback-actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.btn.btn-blue {
+    background: #2282f3;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 9px 22px;
+    border: none;
+    font-size: 1.08em;
+    transition: background .15s;
+}
+.btn.btn-blue:hover { background: #1665bb; }
+

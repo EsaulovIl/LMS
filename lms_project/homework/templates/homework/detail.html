@@ -1,0 +1,42 @@
+{% extends "app_base.html" %}
+{% load markdown_extras %}
+{% block title %}Домашнее задание #{{ homework.pk }}{% endblock %}
+
+{% block page_content %}
+<h2>Домашнее задание по теме «{{ homework.schedule.theme.name }}»</h2>
+<p>Дедлайн: {{ homework.deadline }}</p>
+
+<h3>Упражнения</h3>
+<ul>
+    {% for ex in exercises %}
+    <li>
+        №{{ ex.pk }}: {{ ex.description|truncatechars:80 }}
+
+        {% if ex.submission %}
+        — <strong>
+        {% if ex.submission.is_correct %}
+        Верно
+        {% else %}
+        Неверно
+        {% endif %}
+    </strong>
+
+        {% if ex.submission.status == 'auto-graded' or ex.submission.status == 'graded' %}
+        <a href="{% url 'submissions:solution' homework.pk ex.pk %}">
+            {% if ex.submission.status == 'graded' %}
+            Посмотреть проверку ментора
+            {% else %}
+            Просмотреть пояснение
+            {% endif %}
+        </a>
+        {% endif %}
+
+        {% else %}
+        — <a href="{% url 'submissions:solve' homework.pk ex.pk %}">
+            Решить
+        </a>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

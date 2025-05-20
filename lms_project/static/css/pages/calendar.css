@@ -1,0 +1,88 @@
+/* ───────────── каркас календаря ───────────── */
+.calendar-header {
+  display:flex;
+  align-items:center;
+  justify-content:left;
+  gap:1.5rem;
+  margin-bottom:1.75rem;
+}
+
+.calendar-table      { width:100%; border-collapse:separate; border-spacing:24px 0; }
+.calendar-table th   { font-weight:600; text-align:left; padding-bottom:.5rem; }
+.calendar-table td   { vertical-align:top; /* чтобы события «прилипали» вверх */ }
+
+.events-list         { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:16px; }
+
+/* ───────────── карточка-событие ───────────── */
+.event {
+  display:flex; flex-direction:column; gap:8px;
+  background:#fff;
+  border-radius:12px;
+  padding:14px 18px;
+  padding-right: 72px;
+  box-shadow:0 2px 6px rgb(0 0 0 / .04);
+  border:1px solid #DDE3EB;
+  max-width:180px;                /* узкая плитка как в макете */
+  font-size:.9rem;
+  position: relative;
+}
+
+/* цветовые модификаторы (по ev.type)  – можно расширять при необходимости */
+.event.теория    { background:#D4F8DA; }   /* мягкий зелёный */
+.event.домашка  { background:#F7E4A8; }   /* песочный */
+.event.пробник      { background:#CBD7FF; }   /* сиреневый */
+.event.отработка    { background:#F5CDF2; }
+
+/* заголовок задания внутри плитки */
+.event-title {
+  font-weight:600;
+  line-height:1.25;
+  margin-bottom:.25rem;
+}
+
+.event a.stretched-link {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+}
+
+/* бейдж-тег (тип / статус) */
+.badge-tag {
+  display:inline-block; padding:.15em .6em;
+  font-size:.7rem; font-weight:500;
+  border-radius:1rem;
+  background:#E5E7EB; color:#606060;
+}
+
+.badge-deadline {
+  display:inline-block;
+  padding:.2em .25em;
+  border-radius:8px;
+  font-size:.75rem;
+  text-align: center;
+  color:#fff;
+}
+
+.badge-deadline--danger { background:#FF3B30; }
+.badge-deadline--warn   { background:#FF9500; }
+.badge-deadline--ok     { background:#34C759; }
+
+
+/*  ─── контейнер под мини-иконку  */
+.event-icon-wrap {
+  position: absolute;
+  bottom: 14px;                 /* выравниваем по макету */
+  right : 14px;
+
+  width : 36px;
+  height: 36px;
+
+  display:flex; align-items:center; justify-content:center;
+
+}
+
+/* само изображение – 24×24 px, чтобы осталось «воздуха» */
+.event-icon-wrap img {
+  width : 44px;
+  height: 44px;
+}

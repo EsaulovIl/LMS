@@ -1,0 +1,74 @@
+{% extends "app_base.html" %}
+{% load static %}
+{% block title %}Пробники{% endblock %}
+
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/exams.css' %}">
+{% endblock %}
+{% block page_content %}
+<h1 class="fw-bold mb-4">Пробники
+    <small class="fs-6 text-muted ms-3">{{ today_date }}</small>
+</h1>
+
+<!-- Доступные пробники -->
+{% if upcoming %}
+<div class="exam-list">
+    {% for se in upcoming %}
+    <a href="{% url 'exams:detail' se.pk %}" class="exam-card">
+        <div class="exam-card">
+
+            <div class="exam-card__name">
+                {{ se.variant.name }}
+            </div>
+            {% if se.deadline %}
+            <span
+                    class="badge-deadline
+                {% if se.days_left <= 1 %}
+                    badge-deadline--red
+                {% elif se.days_left <= 7 %}
+                    badge-deadline--yellow
+                {% else %}
+                    badge-deadline--green
+                {% endif %}">
+                До: {{ se.deadline|date:"d.m.Y" }}
+        </span>
+            {% endif %}
+
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-muted mb-4">Нет доступных пробников.</div>
+{% endif %}
+
+<!-- Выполненные -->
+<h3 class="mt-4 mb-3 text-muted">Выполненные</h3>
+{% if completed %}
+<div class="exam-list">
+    {% for se in completed %}
+    <div class="exam-card exam-card--done">
+        <div class="exam-card__name">
+            {% if se.status == 'graded' %}
+            <a href="{% url 'exams:results' se.pk %}" class="text-dark">{{ se.variant.name }}</a>
+            {% else %}
+            {{ se.variant.name }}
+            {% endif %}
+        </div>
+        {% if se.status == 'pending_review' %}
+        <span class="badge-hw in-review">на проверке</span>
+        {% elif se.status == 'graded' %}
+        <span class="badge-hw completed">проверено</span>
+        {% else %}
+        <span class="badge-hw">завершён</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-muted">Пока ничего не завершено.</div>
+{% endif %}
+
+{% endblock %}

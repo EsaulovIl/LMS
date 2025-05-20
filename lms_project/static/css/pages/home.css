@@ -1,0 +1,19 @@
+/* бейджи дедлайнов (зелёный / красный / оранж) */
+.badge-deadline   { background:#22C55E; color:#fff; font-size:.75rem; padding:.2em .6em; border-radius:8px; }
+.badge-deadline.r { background:#EF4444; }
+.badge-deadline.o { background:#FE8A0F; }
+
+
+/* ───── список элементов внутри карточки темы ───── */
+.item-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #DDE3EB;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 12px;        /* расстояние между ячейками */
+}
+
+/* убрать отступ у последнего пункта списка */
+.item-box:last-child { margin-bottom: 0; }

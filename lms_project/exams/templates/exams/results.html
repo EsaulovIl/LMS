@@ -1,0 +1,44 @@
+{% extends "app_base.html" %}
+{% load static %}
+{% block title %}Результаты — {{ exam.variant.name }}{% endblock %}
+
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/exams.css' %}">
+{% endblock %}
+{% block page_content %}
+<a href="{% url 'exams:list' %}" class="back-arrow">
+    <img src="{% static 'image/left.png' %}" alt="Назад" />
+</a>
+<h2 class="page-title mb-4">Пробник {{ exam.variant.name }}</h2>
+
+<div class="row gx-4 gy-4 align-items-start">
+    <!-- Общий результат -->
+    <div class="col-md-4">
+        <div class="result-card">
+            <div class="result-card__header">Результат</div>
+            <div class="result-card__score mb-2">
+                <strong>{{ test_score }}</strong><span class="text-muted">/100</span>
+            </div>
+            <div class="result-card__parts text-muted">
+                1 часть: {{ part1_points }} баллов<br>
+                2 часть: {{ part2_points }} баллов
+            </div>
+        </div>
+    </div>
+
+    <!-- Баллы по заданиям -->
+    <div class="col-md-8">
+        <h3 class="mt-0 mb-3">Баллы по заданиям</h3>
+        <div class="task-list">
+            {% for r in rows %}
+            <div class="task-score-card">
+                <span class="task-score-card__title">Задание №{{ r.idx }}</span>
+                <span class="task-score-card__points">{{ r.earned }}/{{ r.maxp }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

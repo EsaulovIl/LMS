@@ -1,0 +1,53 @@
+{% extends "app_base.html" %}
+{% load static %}
+{% block title %}Отработки в разделе {{ section.id }}{% endblock %}
+
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/course.css' %}">
+{% endblock %}
+{% block page_content %}
+<a href="{% url 'practice:blocks_list' %}" class="cal-nav-btn mb-3 d-inline-flex">
+    <img src="{% static 'image/left.png' %}" alt="Назад">
+</a>
+<h1 class="fw-bold mb-4">
+    Задание №{{ section.id }}
+</h1>
+
+{% if themes %}
+<div class="row g-4">
+    {% for theme in themes %}
+    <div class="col-lg-4 col-md-6">
+        <a href="{% url 'practice:topic_exercises' section.id theme.id %}"
+           class="course-card text-decoration-none text-dark">
+
+            {# Левая половина: изображение #}
+            {% static 'image/course-placeholder.png' as placeholder_img %}
+            <img src="{{ theme.image_url|default:placeholder_img }}"
+                 alt=""
+                 class="course-card__img">
+
+            {# Правая половина: заголовок, статистика, статус #}
+            <div class="course-card__body">
+                <div class="course-card__title">
+                    {{ theme.name }}
+                </div>
+                <div class="course-progress">
+                    <img src="{% static 'image/exercise.png' %}" alt="">
+                    {{ theme.practice_done }}/{{ theme.practice_total }} Практика
+                </div>
+                {% if theme.status and theme.status != 'не начато' %}
+                  <span class="badge-status badge-status--{{ theme.status|slugify }}">
+                    {{ theme.status }}
+                  </span>
+                {% endif %}
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>В этом разделе нет тем для отработки.</p>
+{% endif %}
+{% endblock %}

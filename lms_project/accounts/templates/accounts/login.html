@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Вход{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/accounts.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <form method="post" class="auth-form">
+        <h1 class="auth-title">Вход</h1>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="form-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {{ form.username.errors }}
+        {{ form.password.errors }}
+        {{ form.username }}
+        {{ form.password }}
+        <button type="submit" class="auth-btn">Войти</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+/* ───── Sidebar ───── */
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: var(--bs-body-bg);        /* #ECF5FF */
+  border: 2px solid #ECEFF4;            /* новая рамка */
+  padding: 1.25rem 0;
+}
+
+/* ───── общие стили ссылок меню ───── */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .65rem 1.25rem;
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: var(--bs-border-radius);
+  transition: background .15s;
+}
+
+.sidebar-link:hover { background: rgba(11,117,253,.06); }
+
+/* ───── активный пункт ───── */
+.sidebar-link.active {
+  background: #CDE4FF;                 /* светло-голубой */
+  border: 1px solid var(--bs-primary); /* обводка по макету */
+  color: #000;
+}
+
+/* ───── иконки ───── */
+.sidebar-link .icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* визуальные требования из макета */
+  background: #fff;
+  border: 2px solid #EAEDF0;
+  border-radius: 12px;
+
+  /* базовый внутренний отступ, чтобы иконка не прилипала к краям */
+  padding: 7px;
+  cursor: pointer;
+}
+
+/* при желании лёгкий hover-эффект */
+.header-icon:hover {
+  background: rgba(11,117,253,.05);
+}
+
+/* иконка внутри (любое png / svg) */
+.icon-24 { width: 31px; height: 35px; }
+
+
+/* ───── аватар в хедере ───── */
+.header-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fff;              /* белый фон */
+  border: 2px solid #EAEDF0;     /* рамка */
+  border-radius: 12px;           /* скругление */
+
+  padding: 6px;                 /* базовый внутренний отступ */
+  cursor: pointer;
+}
+
+.header-avatar:hover {
+  background: rgba(11, 117, 253, .05);
+}
+
+/* само изображение внутри */
+.header-avatar img {
+  width: 36px;
+  height: 36px;
+}
+
+
+/* карточка-контейнер */
+.card-white {
+  background:#fff;
+  border: 1px solid #DDE3EB;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / .04);
+  padding: 1.25rem 1.5rem;
+}
+
+/* блок «Задание дня» – жёлтая рамка */
+.card-yellow {
+  background:#fff;
+  border: 2px solid #F7C829;
+  border-radius: 12px;
+  padding: 1.5rem;
+}

@@ -1,0 +1,135 @@
+
+/* ============================================================= */
+/* 1.  Базовые доработки                                        */
+/* ============================================================= */
+
+
+
+
+
+
+
+
+
+
+
+
+
+.card {
+    border-radius: 20px;
+    border: 1.5px solid #eceff4;
+    box-shadow: none;
+}
+
+
+
+
+.link-blue {
+    color: #2574fb;
+    text-decoration: underline;
+}
+.link-blue:hover {
+    color: #0d47a1;
+}
+.card-title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+
+@media (max-width: 991px) {
+    .row.g-4 > [class^="col-"] {
+        margin-bottom: 1.2rem;
+    }
+}
+
+
+
+.back-arrow img {
+    width: 34px;
+    height: 34px;
+    vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* кнопка-иконка из патча */
+.btn-icon {
+  background: transparent;
+  border: 0;
+  padding: .25rem;
+  line-height: 1;
+}
+.btn-icon:hover {
+  background: rgba(11,117,253,.1);
+  border-radius: var(--bs-border-radius-sm);
+}
+
+/* убираем подчёркивание с активной ссылки навбара/сайдбара */
+.nav-link.active {
+  text-decoration: none;
+}
+
+/* ============================================================= */
+/* 2.  Кастомные компоненты (будем пополнять по мере работы)     */
+/* ============================================================= */
+
+/* 2.1. Карточка с той же тенью, что в макете */
+.card-custom {
+  border-radius: var(--bs-border-radius);
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / .06);
+  padding: 1.5rem;            /* = 24 px */
+}
+
+/* 2.2. «Призрачный» бейдж (серый фон, тёмный текст) */
+.badge-ghost {
+  --_bg: #F1F5F9;
+  --_color: #515A6B;
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--bs-border-radius-sm);
+  background: var(--_bg);
+  color: var(--_color);
+}
+
+/* 2.3. Кнопка-иконка без рамки (для уведомлений) */
+.btn-icon {
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* при наведении слегка подсвечиваем фон */
+.btn-icon:hover {
+  background: rgb(11 117 253 / .1);   /* primary с 10 % прозрачности */
+  border-radius: var(--bs-border-radius-sm);
+}

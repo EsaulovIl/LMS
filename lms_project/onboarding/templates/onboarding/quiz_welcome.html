@@ -1,0 +1,20 @@
+{% extends "onboarding/onboarding_base.html" %}
+
+{% block page_content %}
+<div class="quiz-welcome-container">
+    <div class="quiz-welcome-card">
+        <h2 class="quiz-welcome-title">Входное тестирование</h2>
+        <p class="quiz-welcome-text">
+            Пройдите входное тестирование, чтобы алгоритмы подобрали программу обучения индивидуально под вас.
+            <br><br>
+            Оно состоит из 60 вопросов и включает в себя различные задания из первой части КИМ и теоретические вопросы
+            по всем темам ЕГЭ по профильной математике.
+            <br><br>
+            Это займет примерно 3–4 часа, но поможет системе более точно подобрать план обучения.
+        </p>
+        <form method="get" action="{% url 'onboarding:quiz_start' %}">
+            <button type="submit" class="quiz-welcome-btn">Начать тестирование</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+:root {
+  /* фирменные цвета */
+  --bs-primary:  #0B75FD;   /* акцент: кнопки, ссылки, active */
+  --bs-success:  #22C55E;
+  --bs-warning:  #FE8A0F;
+  --bs-danger:   #EF4444;
+
+  /* закругления */
+  --bs-border-radius:         0.75rem; /* 12 px */
+  --bs-border-radius-sm:      0.5rem;  /*  8 px */
+  --bs-border-radius-lg:      1rem;    /* 16 px */
+}

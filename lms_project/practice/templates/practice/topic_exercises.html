@@ -1,0 +1,44 @@
+{# practice/templates/practice/topic_exercises.html #}
+{% extends "app_base.html" %}
+{% load markdown_extras %}
+
+{% block title %}Отработка по теме «{{ theme.name }}»{% endblock %}
+
+{% block page_content %}
+<h2>Отработка: {{ theme.name }}</h2>
+<p>Дедлайн: {{ assignment.deadline }}</p>
+
+<h3>Упражнения</h3>
+<ul>
+  {% for link in links %}
+    {% with ex=link.exercise %}
+    <li>
+      №{{ ex.pk }}: {{ ex.description|truncatechars:80 }}
+
+      {% if link.submission %}
+        — <strong>
+          {% if link.submission.is_correct %}
+            ✔ Верно
+          {% else %}
+            ✘ Неверно
+          {% endif %}
+        </strong>
+
+        {% if not link.submission.is_correct %}
+          <a href="{% url 'submissions:solution' assignment.pk ex.pk %}">
+            Посмотреть пояснение
+          </a>
+        {% endif %}
+
+      {% else %}
+        — <a href="{% url 'submissions:solve' assignment.pk ex.pk %}">
+             Решить
+           </a>
+      {% endif %}
+    </li>
+    {% endwith %}
+  {% empty %}
+    <li>Упражнений для отработки по этой теме нет.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

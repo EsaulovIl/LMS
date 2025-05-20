@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Добро пожаловать{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/accounts.css' %}">
+{% endblock %}
+{% block body_class %}welcome-page{% endblock %}
+
+{% block content %}
+<div class="welcome-container">
+    <img src="{% static 'image/logo.png' %}" alt="МатемАция" class="welcome-logo" />
+    <div class="welcome-choice-block">
+        <a href="{% url 'accounts:login' %}" class="welcome-choice left">
+            <span>Я уже учусь</span>
+        </a>
+        <a href="{% url 'accounts:register' %}" class="welcome-choice right">
+            <span>Я впервые здесь</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

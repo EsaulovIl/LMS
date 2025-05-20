@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_class %}app-layout{% endblock %}
+
+
+{% block content %}
+<header class="navbar navbar-light bg-white border-bottom px-3">
+    <a class="navbar-brand d-flex align-items-center gap-2">
+        <img src="{% static 'image/logo.png' %}" alt="logo" height="32">
+    </a>
+
+    <div class="ms-auto d-flex align-items-center gap-3">
+        {# ——— уведомления ——— #}
+        <button class="header-icon position-relative"
+                id="notif-btn"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#notifOffcanvas">
+            <img src="{% static 'image/bell.png' %}" class="icon-24" alt="">
+            {% if unread_count %}
+            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle
+                   rounded-pill">{{ unread_count }}</span>
+            {% endif %}
+        </button>
+        <div class="offcanvas offcanvas-end"
+             tabindex="-1"
+             id="notifOffcanvas"
+             aria-labelledby="notifOffcanvasLabel"
+             data-mark-read-url="{% url 'accounts:notif_mark_read' %}">
+
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="notifOffcanvasLabel">Уведомления</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                {% if notifications %}
+                {% for n in notifications %}
+                <div class="card mb-3 {% if not n.read_at %}border-primary{% endif %}">
+                    <div class="card-body py-2">
+                        <p class="mb-1 fw-semibold">{{ n.text }}</p>
+                        <small class="text-muted">{{ n.created_at|date:"d.m.Y H:i" }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted text-center">Нет уведомлений</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {# ——— профиль ——— #}
+        <div class="dropdown">
+            <a class="header-avatar" data-bs-toggle="dropdown" role="button">
+                <img src="{% static 'image/avatar.png' %}" alt="avatar">
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li class="dropdown-header small">
+                    {{ request.user.get_full_name|default:request.user.username }}
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Профиль</a></li>
+                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<div class="d-flex">
+
+    <aside class="sidebar flex-shrink-0">
+        {% block sidebar %}
+        <nav class="nav flex-column">
+            {% if user.role.name == 'student' %}
+            <a class="sidebar-link {% if request.resolver_match.view_name == 'planning:home' %}active{% endif %}"
+               href="{% url 'planning:home' %}">
+                <img src="{% static 'image/home.png' %}" class="icon" alt=""> Главная
+            </a>
+
+            <a class="sidebar-link {% if request.resolver_match.view_name == 'planning:calendar' %}active{% endif %}"
+               href="{% url 'planning:calendar' %}">
+                <img src="{% static 'image/calendar.png' %}" class="icon" alt=""> Календарь
+            </a>
+
+            <a class="sidebar-link {% if request.resolver_match.view_name == 'planning:course' %}active{% endif %}"
+               href="{% url 'planning:course' %}">
+                <img src="{% static 'image/course.png' %}" class="icon" alt=""> Курс
+            </a>
+
+            <a class="sidebar-link {% if request.resolver_match.view_name == 'practice:blocks_list' %}active{% endif %}"
+               href="{% url 'practice:blocks_list' %}">
+                <img src="{% static 'image/practice.png' %}" class="icon" alt=""> Отработка
+            </a>
+
+            <a class="sidebar-link {% if request.resolver_match.view_name == 'exams:list' %}active{% endif %}"
+               href="{% url 'exams:list' %}">
+                <img src="{% static 'image/exams.png' %}" class="icon" alt=""> Пробники
+            </a>
+            {% endif %}
+        </nav>
+        {% endblock %}
+    </aside>
+
+    <main class="flex-grow-1 p-4">
+        {% block page_content %}{% endblock %}
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+{{ block.super }}
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock %}

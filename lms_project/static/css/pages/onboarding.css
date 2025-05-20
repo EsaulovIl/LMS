@@ -1,0 +1,346 @@
+.survey-form-container {
+    max-width: 680px;
+    margin-left: 40px;
+    margin-top: 32px;
+    background: none;           /* убираем фон */
+    border-radius: 0;           /* убираем скругления */
+    box-shadow: none;           /* убираем тень */
+    padding: 0;                 /* опционально — убираем внутренние отступы */
+}
+
+@media (max-width: 900px) {
+    .survey-form-container {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 32px 12px;
+        max-width: 100%;
+    }
+}
+
+.survey-form {
+    background: none;
+    max-width: 700px;
+    margin: 2em auto 0 auto;
+    border-radius: 10px;
+    padding: 2em 2em 1.5em 2em;
+
+}
+.survey-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+.survey-step {
+    margin-bottom: 1.8em;
+}
+.survey-label {
+    font-size: 1.2rem;
+    margin-bottom: 0.5em;
+    display: block;
+}
+.survey-input {
+    display: block;
+    width: 100%;
+    font-size: 1.1em;
+    padding: .7em 1em;
+    margin-bottom: .2em;
+    background: #fff;
+    border: 1.5px solid #c4e2ff;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border-color .2s;
+}
+.survey-input:focus {
+    border-color: #4b6cff;
+    outline: none;
+}
+.survey-select {
+    cursor: pointer;
+}
+.survey-error {
+    color: #f00;
+    font-size: .96em;
+    margin-top: .2em;
+    margin-bottom: .3em;
+}
+.survey-table-wrap {
+    margin-top: 1em;
+    overflow-x: auto;
+}
+.survey-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    width: 370px;
+    box-shadow: 0 2px 10px #0001;
+    margin-bottom: 1em;
+}
+.survey-table th,
+.survey-table td {
+    text-align: center;
+    padding: .7em .6em;
+    font-size: 1em;
+}
+.survey-table .topic-col {
+    text-align: left;
+    min-width: 130px;
+    font-size: 1em;
+    font-weight: 500;
+}
+.survey-table th {
+    background: #f6fbff;
+    font-weight: bold;
+}
+.survey-table input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    accent-color: #25c137;
+    cursor: pointer;
+}
+.survey-btn {
+    margin-top: 2em;
+    padding: .8em 2.2em;
+    font-size: 1.15em;
+    background: #2564ff;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .2s;
+}
+.survey-btn:hover {
+    background: #1949b7;
+}
+@media (max-width: 800px) {
+    .survey-form {
+        max-width: 98vw;
+        padding: 1em .5em;
+    }
+    .survey-table {
+        width: 100%;
+    }
+}
+
+.quiz-welcome-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.quiz-welcome-card {
+    background: #fff;
+    padding: 36px 32px;
+    border-radius: 24px;
+    box-shadow: 0 6px 32px 0 rgba(35,54,98,.07), 0 1.5px 6px rgba(35,54,98,.08);
+    max-width: 460px;
+    text-align: center;
+}
+
+.quiz-welcome-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.quiz-welcome-text {
+    color: #222;
+    font-size: 1.04rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.quiz-welcome-btn {
+    padding: 0.7em 1.6em;
+    background: #2278FF;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.08rem;
+    font-weight: 500;
+    transition: background .15s;
+    cursor: pointer;
+}
+
+.quiz-welcome-btn:hover {
+    background: #1a5edc;
+}
+
+.onboarding-main {
+    min-height: calc(100vh - 64px);
+    align-items: center;
+    justify-content: center;
+    /* Не ограничиваем max-width, чтобы центрировать page_content */
+}
+
+.quiz-main {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding-top: 16px;
+    position: relative;
+}
+
+/* Кнопка завершить — фиксировано в правом верхнем углу блока */
+.quiz-finish-form {
+    position: absolute;
+    top: 18px;
+    right: 28px;
+    z-index: 10;
+}
+
+.quiz-finish-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 170px;
+    max-width: 260px;
+    padding: 12px 22px;
+    background: #ff3c32;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: none;
+    transition: background 0.18s;
+    line-height: 1.1;
+    white-space: nowrap;
+    font-family: inherit;
+}
+.quiz-finish-btn:hover,
+.quiz-finish-btn:focus {
+    background: #e63229;
+    outline: none;
+}
+
+/* ——— Верхний ряд: навигация + таймер ——— */
+.quiz-header-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 26px;
+    margin-bottom: 52px;
+    margin-top: 34px;  /* ниже кнопки */
+    padding-right: 530px; /* зарезервировать место под кнопку */
+}
+
+/* Навигация по заданиям */
+.exercise-nav {
+    flex: 1;
+}
+.exercise-index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    background: #fff;
+    border-radius: 32px;
+    padding: 16px 32px 14px 20px;
+    border: 3px solid #bdd7ef;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 0;
+    max-width: 100%;
+}
+.exercise-index li {
+    list-style: none;
+}
+.exercise-index li a,
+.exercise-index li strong {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #e7f2ff;
+    color: #2282f3;
+    font-weight: bold;
+    font-size: 24px;
+    text-decoration: none;
+    transition: background .15s, color .15s;
+}
+.exercise-index li.current strong,
+.exercise-index li a:hover {
+    background: #2282f3;
+    color: #fff;
+}
+
+/* Таймер */
+.quiz-timer-wrapper {
+    align-self: flex-start;
+    margin-left: 18px;
+    min-width: 130px;
+}
+.quiz-timer {
+    border: 3px solid #bdd7ef;
+    border-radius: 16px;
+    padding: 14px 32px;
+    background: #fff;
+    font-size: 22px;
+    font-weight: 400;
+    text-align: center;
+}
+.quiz-timer span { display: block; }
+.quiz-timer-time {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 4px;
+    letter-spacing: .5px;
+}
+
+/* ——— Блок задания ——— */
+.quiz-question-block {
+    margin-top: 32px;
+    max-width: 670px;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 2px 16px #0001;
+    padding: 38px 44px 38px 44px;
+    font-size: 21px;
+}
+
+.quiz-question-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.quiz-answer-form input[type="text"],
+.quiz-answer-form input[type="number"] {
+    font-size: 20px;
+    padding: 9px 13px;
+    border-radius: 8px;
+    border: 2px solid #bdd7ef;
+    margin-top: 12px;
+    width: 240px;
+    box-sizing: border-box;
+}
+
+.quiz-answer-btns {
+    margin-top: 22px;
+    display: flex;
+    gap: 30px;
+}
+
+/* Кнопки */
+.btn {
+    font-size: 19px;
+    padding: 12px 27px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.btn-blue {
+    background: #2196f3;
+    color: #fff;
+}
+.btn-blue:hover {
+    background: #1976d2;
+}

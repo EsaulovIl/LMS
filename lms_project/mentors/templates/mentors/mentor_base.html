@@ -1,0 +1,29 @@
+{# apps/mentors/templates/mentors/mentor_base.html #}
+{% extends "app_base.html" %}
+{% load static %}
+
+{# если нужны дополнительные стили именно для ментора, подключаем их здесь #}
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/mentors.css' %}">
+{% endblock %}
+
+{# Переопределяем только сам сайдбар (в app_base он в блоке sidebar) #}
+{% block sidebar %}
+<nav class="nav flex-column">
+    <a class="sidebar-link {% if request.resolver_match.url_name == 'check' %}active{% endif %}"
+       href="{% url 'mentors:check' %}">
+        <img src="{% static 'image/check.png' %}" class="icon" alt=""> Проверка
+    </a>
+    <a class="sidebar-link {% if request.resolver_match.url_name == 'exams' %}active{% endif %}"
+       href="{% url 'mentors:exams' %}">
+        <img src="{% static 'image/exams.png' %}" class="icon" alt=""> Пробники
+    </a>
+</nav>
+{% endblock %}
+
+{# В app_base основной блок для контента называется page_content,
+здесь вкладываем mentor_page_content #}
+{% block page_content %}
+{% block mentor_page_content %}{% endblock %}
+{% endblock %}

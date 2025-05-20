@@ -1,0 +1,39 @@
+{% extends "mentors/mentor_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/exams.css' %}">
+{% endblock %}
+
+{% block mentor_page_content %}
+<h1 class="fw-bold mb-4">Пробные экзамены на проверку (часть 2)</h1>
+
+{% if exams %}
+<div class="exam-list mb-5">
+    {% for item in exams %}
+    <a href="{% url 'mentors:exam_review' item.exam.pk %}" class="exam-card">
+        <div class="exam-card__name">
+            {{ item.exam.student.get_full_name }} — {{ item.exam.variant.name }}
+        </div>
+        <span class="badge-hw in-review">ожидает проверки</span>
+    </a>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+<nav class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">&laquo; Назад</a>
+    {% endif %}
+    <span>Стр. {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Вперёд &raquo;</a>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<p class="text-muted">Нет экзаменов для проверки.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "app_base.html" %}
+{% load markdown_extras %}
+
+{% block page_content %}
+<p>
+    {% if assignment_type == 'homework' %}
+    <a href="{% url 'homework:detail' assignment.pk %}">
+        ← Назад к домашке
+    </a>
+    {% else %}
+    <a href="{% url 'practice:topic_exercises' assignment.theme.section_id assignment.theme_id %}">
+        ← Назад к отработкам
+    </a>
+    {% endif %}
+</p>
+
+<h2>Решение задачи №{{ exercise.pk }}</h2>
+
+<div class="exercise-description">
+    {{ exercise.description|markdown }}
+</div>
+
+<div class="user-answer">
+    <strong>Ваш ответ:</strong> {{ submission.answer }}
+</div>
+
+{# Для тестовых заданий — результат автопроверки и пояснение из exercise.solution #}
+{% if exercise.exercise_type == 'test' %}
+<div class="result">
+    <strong>Результат автопроверки:</strong>
+    {% if correct %}Верно{% else %}Неверно{% endif %}
+</div>
+
+{% if not correct and exercise.solution %}
+<section class="exercise-solution">
+    <h3>Пояснение</h3>
+    {{ exercise.solution|markdown }}
+</section>
+{% endif %}
+
+{# Для "открытых" задач — показываем статус и обратную связь ментора #}
+{% else %}
+<div class="result">
+    {% if submission.status == 'pending' %}
+    <em>Ваше решение ожидает проверки.</em>
+    {% else %}
+    <em>Задание проверено.</em>
+    {% endif %}
+</div>
+
+{% if feedbacks %}
+<section class="mentor-feedbacks">
+    <h3>Обратная связь ментора</h3>
+    {% for fb in feedbacks %}
+    <div class="feedback-item mb-3 p-3 border rounded">
+        <p><strong>Баллы:</strong> {{ fb.grade }}</p>
+        {% if fb.feedback %}
+        <p><strong>Комментарий:</strong> {{ fb.feedback }}</p>
+        {% endif %}
+        {% if fb.content_url %}
+        <p>
+            <a href="{{ fb.content_url }}" download>
+                Скачать решение ментора
+            </a>
+        </p>
+        {% endif %}
+        <small class="text-muted">
+            Оценено {{ fb.created_at|date:"d.m.Y H:i" }}
+        </small>
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+{% endif %}
+
+{# Материалы по теме #}
+{% if notebooks %}
+<section class="materials mt-4">
+    <h3>Материалы по теме «{{ exercise.theme.name }}»</h3>
+    <ul>
+        {% for nb in notebooks %}
+        <li>
+            {% if nb.content_url %}
+            <a href="{{ nb.content_url }}" download>{{ nb.title }}</a>
+            {% else %}
+            <em>Ссылка не сгенерирована</em>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+{% endblock %}

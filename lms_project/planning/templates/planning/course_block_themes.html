@@ -1,0 +1,48 @@
+{% extends "app_base.html" %}
+{% load static %}
+{% block title %}Темы раздела {{ section.id }}{% endblock %}
+
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/course.css' %}">
+{% endblock %}
+{% block page_content %}
+<a href="{% url 'planning:course' %}"
+   class="cal-nav-btn mb-3 d-inline-flex">
+  <img src="{% static 'image/left.png' %}" alt="Назад">
+</a>
+
+<h1 class="fw-bold mb-4">Задание №{{ section.id }}</h1>
+
+{% if themes %}
+  <div class="row g-4">
+    {% for t in themes %}
+      <div class="col-lg-4 col-md-6">
+        <a href="{% url 'planning:theme_content' section.id t.id %}"
+           class="course-card text-decoration-none text-dark">
+
+          <img src="{{ t.image_url }}" class="course-card__img" alt="">
+
+          <div class="course-card__body">
+            <div class="course-card__title">{{ t.name }}</div>
+
+            <div class="course-progress">
+              <img src="{% static 'image/theory.png' %}" alt=""> {{ t.theory_done }}/{{ t.theory_total }} Теория
+            </div>
+            <div class="course-progress">
+              <img src="{% static 'image/exercise.png' %}" alt=""> {{ t.practice_done }}/{{ t.practice_total }} Практика
+            </div>
+
+            {% if t.status %}
+              <span class="badge-status {{ t.status }}">{{ t.status_display }}</span>
+            {% endif %}
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>Пока тем не запланировано.</p>
+{% endif %}
+{% endblock %}

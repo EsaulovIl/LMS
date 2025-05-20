@@ -1,0 +1,161 @@
+{% extends "app_base.html" %}
+{% load markdown_extras %}
+{% load static %}
+
+{% block title %}Задача №{{ exercise.pk }}{% endblock %}
+
+{% block page_content %}
+<div class="d-flex align-items-center mb-3">
+    <a href="{% if assignment_type == 'homework' %}
+        {% url 'planning:theme_content' assignment.schedule.section.id assignment.schedule.theme.id %}
+    {% else %}
+        {% url 'practice:block_topics' assignment.theme.section_id %}
+    {% endif %}" class="back-arrow me-3">
+        <img src="{% static 'image/left.png' %}" alt="Назад" width="32">
+    </a>
+    <h2 class="mb-0 fw-bold">
+        Задание №{{ exercise.pk }}.
+        <span class="fw-normal text-secondary">{{ exercise.title }}</span>
+    </h2>
+</div>
+
+<!-- Навигация по задачам -->
+<nav class="exercise-nav">
+    <ul class="exercise-index">
+        {% for ex_id in ex_ids %}
+        {% if ex_id == current_id %}
+        <li><strong>{{ forloop.counter }}</strong></li>
+        {% else %}
+        <li>
+            <a href="{% url 'submissions:solve' assignment.pk ex_id %}">
+                {{ forloop.counter }}
+            </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <!-- Карточка с условием -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4 class="card-title mb-3">Задача {{ forloop.parentloop.counter|default:1 }}</h4>
+                <div class="exercise-description fs-5">
+                    {{ exercise.description|markdown }}
+                </div>
+            </div>
+        </div>
+
+        {% if exercise.exercise_type == 'test' %}
+        <!-- Карточка для тестового ответа -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title mb-2">Самопроверка</h5>
+                <p class="text-muted mb-2">Введи получившийся ответ в поле и нажми кнопку проверить ответ</p>
+                {% if submission %}
+                <div class="alert {% if submission.is_correct %}alert-success{% else %}alert-danger{% endif %} mb-2">
+                    <strong>Ваш ответ:</strong> {{ submission.answer }}<br>
+                    {% if submission.is_correct %}
+                    ✔ Верно!
+                    {% else %}
+                    ✘ Неверно.
+                    {% endif %}
+                </div>
+                {% if exercise.solution %}
+                <section class="exercise-solution mt-3">
+                    <h6 class="fw-semibold">Пояснение</h6>
+                    {{ exercise.solution|markdown }}
+                </section>
+                {% endif %}
+                {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.as_p }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Проверить</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <!-- Карточка для загрузки файла (открытая часть) -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title mb-2">Проверка</h5>
+                {% if submission %}
+                {% if submission.status == 'pending' %}
+                <div class="alert alert-info mb-2">
+                    <p>Ваше решение загружено и ожидает проверки.</p>
+                    {% for f in submission.files.all %}
+                    <a href="{{ f.content_url }}" download>{{ f.file_path }}</a><br>
+                    {% endfor %}
+                    {% if submission.grader %}
+                    <!--<p class="mt-2"><strong>Ментор:</strong> {{ submission.grader.get_full_name }}</p>-->
+                    {% endif %}
+                </div>
+                {% elif submission.status == 'graded' %}
+                <div class="alert alert-success mb-2">
+                    <h6>Результаты проверки</h6>
+                    {% for fb in feedbacks %}
+                    <div class="mentor-feedback-block mb-3 p-3 border rounded bg-light">
+                        <p>
+                            <strong>Ментор:</strong>
+                            {% if fb.mentor.first_name or fb.mentor.last_name %}
+                            {{ fb.mentor.first_name }} {{ fb.mentor.last_name }}
+                            {% else %}
+                            {{ fb.mentor.username }}
+                            {% endif %}
+                        </p>
+                        <p><strong>Баллы:</strong> {{ fb.grade }}</p>
+                        {% if fb.feedback %}
+                        <p><strong>Комментарий:</strong><br>{{ fb.feedback|linebreaks }}</p>
+                        {% endif %}
+                        {% if fb.content_url %}
+                        <p><strong>Файл-ответ:</strong>
+                            <a href="{{ fb.content_url }}" download>{{ fb.file_path }}</a>
+                        </p>
+                        {% endif %}
+                        <small class="text-muted">Проверено {{ fb.created_at|date:"d.m.Y H:i" }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% else %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ file_form.as_p }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Отправить решение</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-lg-5">
+        <!-- Карточка с материалами -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Материалы по теме</h5>
+                <ul class="list-unstyled mb-0">
+                    {% for nb in notebooks %}
+                    <li class="mb-2 d-flex align-items-center">
+                        <span class="pdf-icon me-2">pdf</span>
+                        <span class="flex-grow-1">{{ nb.title }}</span>
+                        {% if nb.content_url %}
+                        <a class="ms-2 link-blue" href="{{ nb.content_url }}" download>скачать</a>
+                        {% endif %}
+                    </li>
+                    {% empty %}
+                    <li class="text-muted">Нет материалов.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

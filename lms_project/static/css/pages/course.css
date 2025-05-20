@@ -1,0 +1,101 @@
+/* ───── карточка задания в «Мой курс» ───── */
+.course-card {
+  display:flex;
+  border-radius:12px;
+  overflow:hidden;                 /* чтобы рисунок не выходил за радиус */
+  background:#fff;
+  box-shadow:0 2px 6px rgb(0 0 0 / .04);
+  transition:transform .12s;
+}
+.course-card:hover { transform:translateY(-2px); }
+
+.course-card__img {
+  width:160px;                     /* фиксированная ширина части с рисунком */
+  object-fit:cover;
+}
+
+.course-card__body {
+  flex:1;
+  padding:22px 24px;
+}
+
+.course-card__title { font-weight:700; margin-bottom:18px; font-size:1.05rem; }
+
+/* строка «иконка + текст» */
+.course-progress {
+  display:flex; align-items:center; gap:8px;
+  font-size:.9rem; color:#606060;
+  margin-bottom:6px;
+}
+.course-progress:last-child { margin-bottom:0; }
+
+.course-progress img { width:20px; height:20px; }
+
+
+/* вариант с картинкой справа (финальное тестирование) */
+.course-card--reverse { flex-direction: row-reverse; }
+
+/* бейдж статуса темы */
+.badge-status {
+  display:inline-block; font-size:.75rem; font-weight:600;
+  padding:.25em .8em; border-radius:12px; color:#fff;
+}
+.badge-status.done   { background:#34C759; }   /* выполнено  */
+.badge-status.wip    { background:#0B75FD; }   /* в процессе */
+
+
+/* курс-карточка — фиксированная высота */
+.course-card {
+  height: 210px;              /* выберите итоговое значение под макет */
+}
+
+/* картинка слева/справа растягивается по высоте карточки */
+.course-card__img {
+  height: 100%;
+  object-fit: cover;          /* обрезаем лишнее, сохраняем пропорции */
+}
+
+
+.badge-status.pending  { background:#E5E7EB; color:#606060; } /* серый */
+.badge-status.in_progress  { background:#0B75FD; color:#fff;    } /* синий */
+.badge-status.done { background:#34C759; color:#fff;    } /* зелёный */
+
+
+/* ──────────  общий “блок-карточка” ────────── */
+.content-card{
+  position: relative;
+  background:#fff;
+  border-radius:12px;
+  padding:24px;
+  box-shadow:0 2px 6px rgb(0 0 0 / .04);
+  margin-bottom:32px;
+}
+
+
+
+.badge-hw {
+  display: inline-block;
+  padding: 0.4em 1.5em;
+  border-radius: 2em;
+  color: #fff;
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-left: 8px;
+}
+.badge-hw-vypolneno     { background: #34C759; }
+.badge-hw-v-processe    { background: #007aff; }
+.badge-hw-na-proverke   { background: #ffbe0b; color: #fff; }
+
+
+
+/* файл PDF в списке материалов */
+.material-item{
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:18px;
+}
+.material-item:last-child{ margin-bottom:0; }
+.material-item .icon{
+  width:36px; height:46px; background:#E5E7EB;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:600; border-radius:6px;
+}

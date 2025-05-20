@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<header class="navbar navbar-light bg-white border-bottom px-3">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'planning:home' %}">
+        <img src="{% static 'image/logo.png' %}" alt="logo" height="32">
+    </a>
+</header>
+<main class="onboarding-main">
+    {% block page_content %}{% endblock %}
+</main>
+{% endblock %}

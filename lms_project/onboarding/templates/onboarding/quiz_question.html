@@ -1,0 +1,67 @@
+{% extends "onboarding/onboarding_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/onboarding.css' %}">
+{% endblock %}
+{% block extra_scripts %}
+{{ block.super }}
+<script src="{% static 'js/timer.js' %}"></script>
+{% endblock %}
+
+{% block page_content %}
+<div class="quiz-main">
+
+    <!-- Кнопка всегда в правом верхнем углу -->
+    <form method="post" action="{% url 'onboarding:quiz_finish' %}" class="quiz-finish-form">
+        {% csrf_token %}
+        <button type="submit" class="quiz-finish-btn">
+            Завершить тестирование
+        </button>
+    </form>
+
+    <div class="quiz-header-row">
+        <nav class="exercise-nav">
+            <ul class="exercise-index">
+                {% for i in indices %}
+                {% if i == step %}
+                <li class="current"><strong>{{ i }}</strong></li>
+                {% else %}
+                <li>
+                    <a href="{% url 'onboarding:quiz_question' step=i %}">
+                        {{ i }}
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </nav>
+        <div class="quiz-timer-wrapper">
+            <div
+                    id="timer"
+                    data-timer
+                    data-time-left="{{ time_left }}"
+                    data-finish-url="{% url 'onboarding:quiz_finish' %}"
+                    class="quiz-timer"
+            >
+                <span>Осталось</span>
+                <span data-time-display class="quiz-timer-time">–:–:–</span>
+            </div>
+        </div>
+    </div>
+    <div class="quiz-question-block">
+        <div class="quiz-question-title">Задача {{ step }}</div>
+        <div class="quiz-question-text">{{ question.question_text|safe }}</div>
+        <form method="post" class="quiz-answer-form">
+            {% csrf_token %}
+            {{ form.answer }}
+            <div class="quiz-answer-btns">
+                <button type="submit" name="save_answer" class="btn btn-blue">
+                    Сохранить ответ
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,136 @@
+/* ───── видео внутри карточки ───── */
+.video-container{ margin-bottom:24px; position:relative; }
+.video-container:last-child{ margin-bottom:0; }
+
+.video-container video{
+  width:100%;
+  height:auto;
+  border-radius:12px;
+  background:#000;
+}
+
+/* было: top:16px;  стало: top:8px;  */
+.badge-viewed{
+  position:absolute;
+  top:12px;          /* ↑ приподняли на 8 px */
+  right:16px;
+  background:#34C759; color:#fff;
+  font-size:.75rem; font-weight:600;
+  padding:.25em .8em;
+  border-radius:1rem;
+}
+
+
+.pdf-icon {
+    display: inline-block;
+    background: #EAEDF0;
+    border-radius: 8px;
+    color: #7d7d7d;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 38px;
+    margin-right: 8px;
+}
+
+
+
+.exercise-nav {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 24px;
+}
+
+.exercise-index {
+    display: flex;
+    gap: 11px;
+    background: rgba(196, 226, 255, 0.32); /* #C4E2FF52 */
+    border: 3px solid #97A3AB;
+    border-radius: 20px;
+    padding: 4px 12px;
+    margin: 0;
+    list-style: none;
+    align-items: center;
+    width: fit-content;
+    box-sizing: border-box;
+}
+
+.exercise-index li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.exercise-index a,
+.exercise-index strong {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    font-size: 1.7rem;
+    font-weight: 700;
+    border-radius: 50%;
+    background: #C4E2FF;
+    color: #2693FF;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    border: none;
+    box-sizing: border-box;
+}
+
+.exercise-index a:hover {
+    background: #cbe5ff;
+}
+
+.exercise-index strong {
+    background: #1897F8;
+    color: #fff;
+}
+
+.exercise-description {
+    font-size: 1.15rem;
+}
+
+
+
+/* Таймер */
+.quiz-timer-wrapper {
+    align-self: flex-start;
+    margin-left: 18px;
+    min-width: 130px;
+}
+.quiz-timer {
+    border: 3px solid #bdd7ef;
+    border-radius: 16px;
+    padding: 14px 32px;
+    background: #fff;
+    font-size: 22px;
+    font-weight: 400;
+    text-align: center;
+}
+.quiz-timer span { display: block; }
+.quiz-timer-time {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 4px;
+    letter-spacing: .5px;
+}
+.back-arrow img {
+    border-radius: 8px;
+    border: 2px solid #EAEDF0;
+    background: #fff;
+}
+
+.card.mb-3 {
+  border-radius: 1rem; /* 16px, можно другое значение */
+  border: #EAEDF0;
+}
+
+.card.mb-4 {
+  border-radius: 1rem; /* 16px, можно другое значение */
+  border: none;
+}

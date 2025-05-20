@@ -1,0 +1,159 @@
+{% extends "app_base.html" %}
+{% load static %}
+{% block title %}Главная{% endblock %}
+
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+{% endblock %}
+
+{% block page_content %}
+<h1 class="fw-bold mb-4">Сегодня
+    <small class="fs-6 text-muted ms-3">{{ today_date }}</small>
+</h1>
+
+<div class="row g-4">
+    <!---- левая колонка – задания и отработки ---->
+    <div class="col-lg-6">
+        {#--- Блок «Текущая тема» / «Задание №3 …» ---#}
+        <section class="card-white mb-4">
+            <h5 class="fw-semibold mb-3">
+                {{ current_entry.theme.name }}
+            </h5>
+
+            <ul class="list-unstyled">
+                {% if current_entry %}
+                <li class="item-box">
+                    <a href="{% url 'planning:theme_content' current_entry.section.id current_entry.theme.id %}"
+                       class="d-flex align-items-center justify-content-between w-100 text-decoration-none text-body">
+                    <span>
+                        <img src="{% static 'image/video.png' %}" class="me-2" width="20">
+                        Видео
+                    </span>
+                        <span class="badge-ghost">теория</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="item-box">
+                    <span>
+                        <img src="{% static 'image/video.png' %}" class="me-2" width="20">
+                        Нет видео
+                    </span>
+                    <span class="badge-ghost">теория</span>
+                </li>
+                {% endif %}
+                {% if notebooks %}
+                {% for nb in notebooks %}
+                <li class="item-box">
+                    <a href="{{ nb.content_url }}" download
+                       class="d-flex align-items-center justify-content-between w-100 text-decoration-none text-body">
+                    <span>
+                        <img src="{% static 'image/note.png' %}" class="me-2" width="20">
+                        {{ nb.title }}
+                    </span>
+                        <span class="badge-ghost">теория</span>
+                    </a>
+                </li>
+                {% endfor %}
+                {% else %}
+                <li class="item-box">
+                    <span>
+                        <img src="{% static 'image/note.png' %}" class="me-2" width="20">Нет конспектов
+                    </span>
+                    <span class="badge-ghost">теория</span>
+                </li>
+                {% endif %}
+                {# --- Домашнее задание (теперь li целиком — ссылка) --- #}
+                {% if current_homework %}
+                <li class="item-box">
+                    <a href="{% url 'homework:detail' current_homework.pk %}"
+                       class="d-flex align-items-center justify-content-between w-100 text-decoration-none text-body">
+                        <span>
+                            <img src="{% static 'image/homework.png' %}" class="me-2" width="20">
+                            Домашнее задание
+                        </span>
+                        <span class="badge bg-primary">{{ hw_status }}</span>
+                        <span class="badge-ghost">практика</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="item-box">
+                    <span>
+                    <img src="{% static 'image/homework.png' %}" class="me-2" width="20">Нет домашки
+                    </span>
+                    <span class="badge-ghost">практика</span>
+                </li>
+                {% endif %}
+            </ul>
+        </section>
+
+        {#--- Блок «Отработка заданий» ---#}
+        <section class="card-white">
+            <h5 class="fw-semibold mb-3">Отработка заданий</h5>
+            <ul class="list-unstyled">
+                {% if practice_assignments %}
+                {% for pa in practice_assignments %}
+                <li class="item-box">
+                    <a href="{% url 'practice:topic_exercises' pa.theme.section.id pa.theme.id %}"
+                       class="d-flex align-items-center justify-content-between w-100 text-decoration-none text-body">
+                        <span>
+                            <img src="{% static 'image/remediation.png' %}" class="me-2" width="20">
+                                Отработка по теме «{{ pa.theme.name }}»
+                        </span>
+                        <span class="badge-deadline">
+                            Дедлайн: {{ pa.deadline|date:"d.m.Y" }}
+                        </span>
+                    </a>
+                </li>
+                {% endfor %}
+                {% else %}
+                <li class="d-flex align-items-center justify-content-between">
+                    <span>Нет отработок</span>
+                </li>
+                {% endif %}
+            </ul>
+        </section>
+    </div>
+
+    <!---- правая колонка – «Задание дня» ---->
+    <div class="col-lg-6">
+        {% if assignment %}
+        <section class="card-yellow p-4">
+            <h5 class="fw-semibold mb-3">
+                <img src="{% static 'image/star.png' %}" class="me-2" width="20">
+                Задание дня — {{ assignment.assigned_date|date:"d.m.Y" }}
+            </h5>
+
+            {% if assignment.completed_at %}
+            <div class="result mb-3">
+                {% if assignment.is_correct %}
+                <p class="text-success mb-1">✔ Правильно!</p>
+                {% else %}
+                <p class="text-danger mb-1">✘ Неверно.</p>
+                {% endif %}
+                <p class="small">{{ assignment.task.explanation }}</p>
+            </div>
+            {% else %}
+            <p class="small mb-3">{{ assignment.task.question }}</p>
+            <form method="post" action="{% url 'daily:submit' %}" class="vstack gap-3">
+                {% csrf_token %}
+                {% for opt in assignment.task.options.all %}
+                <label class="form-check w-100">
+                    <input class="form-check-input me-2" type="radio" name="option" value="{{ opt.id }}">
+                    <span class="form-check-label">{{ opt.option_text }}</span>
+                </label>
+                {% endfor %}
+                <button class="btn btn-primary align-self-start px-4">
+                    Ответить
+                </button>
+            </form>
+            {% endif %}
+        </section>
+        {% else %}
+        <p class="text-center">Все задания дня выполнены.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

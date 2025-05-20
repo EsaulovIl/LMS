@@ -1,0 +1,87 @@
+{% extends "app_base.html" %}
+{% load static %}
+{% load static date_extras %}
+{% block title %}Календарь{% endblock %}
+
+
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/calendar.css' %}">
+{% endblock %}
+{% block page_content %}
+<section class="calendar-header">
+    <a class="cal-nav-btn"
+       href="{% url 'planning:calendar' %}?week_start={{ prev_week|date:'Y-m-d' }}">
+        <img src="{% static 'image/left.png' %}" alt="←">
+    </a>
+
+    <a class="cal-nav-btn"
+       href="{% url 'planning:calendar' %}?week_start={{ next_week|date:'Y-m-d' }}">
+        <img src="{% static 'image/right.png' %}" alt="→">
+    </a>
+
+    <h2 class="m-0 fw-bold">
+        {% if start.month == end.month %}
+        {{ start.day }} – {{ end.day }} {{ start|date:"F" }}
+        {% else %}
+        {{ start|date:"d F" }} – {{ end|date:"d F" }}
+        {% endif %}
+    </h2>
+</section>
+
+<table class="calendar-table">
+    <thead>
+    <tr>
+        {% for day in days %}
+        <th>
+            {{ day.date|date:"j" }} {{ day.date|date:"D" }}
+        </th>
+        {% endfor %}
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        {% for day in days %}
+        <td>
+            {% if day.events %}
+            <ul class="events-list">
+                {% for ev in day.events %}
+                <li class="event {{ ev.type }}">
+                    <div class="event-title">
+                        {{ ev.title }}
+                    </div>
+
+                    {# маленький бейдж-тип (опционно) #}
+                    {% if ev.type %}
+                    <span class="badge-tag">{{ ev.type }}</span>
+                    {% endif %}
+
+                    {% if ev.deadline %}
+                    <span class="badge-deadline badge-deadline--{{ ev.deadline|deadline_color }}">
+                            До {{ ev.deadline|date:"d.m.Y" }}
+                        </span>
+                    {% endif %}
+
+                    {% if ev.icon_url %}
+                    <span class="event-icon-wrap">
+                            <img src="{{ ev.icon_url }}" alt="">
+                        </span>
+                    {% endif %}
+
+                    {# ссылка-переход, если есть #}
+                    {% if ev.url %}
+                    <a href="{{ ev.url }}" class="stretched-link"></a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </td>
+        {% endfor %}
+    </tr>
+    </tbody>
+</table>
+
+{% endblock %}

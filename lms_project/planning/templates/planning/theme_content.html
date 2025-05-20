@@ -1,0 +1,94 @@
+{% extends "app_base.html" %}
+{% load static content_extras %}
+{% load static date_extras %}
+{% load static %}
+{% block title %}Контент: {{ theme.name }}{% endblock %}
+
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/pages/course.css' %}">
+{% endblock %}
+
+{% block page_content %}
+{# ── кнопка-стрелка назад ── #}
+<a href="{% url 'planning:course_block_themes' section.id %}" class="cal-nav-btn mb-3 d-inline-flex">
+    <img src="{% static 'image/left.png' %}" alt="←">
+</a>
+
+<h1 class="fw-bold mb-4">Задание №{{ section.id }}. {{ theme.name }}</h1>
+
+{# ─────────── ВИДЕО ─────────── #}
+<div class="content-card">
+    <h3 class="fw-semibold mb-3">Видео</h3>
+
+    {% if videos %}
+    {% for vid in videos %}
+    {% with vp=progress_map|get_item:vid.id %}
+    {% if vp and vp.viewed %}
+    <span class="badge-viewed">просмотрено</span>
+    {% endif %}
+    <div class="video-container">
+        <video id="video-{{ vid.id }}"
+               controls
+               data-video-id="{{ vid.id }}"
+               data-watched-percent="{{ vp.watched_percent|default:0 }}"
+               src="{{ vid.video_url }}">
+        </video>
+    </div>
+    {% endwith %}
+    {% endfor %}
+    {% else %}
+    <p class="text-muted">Видеоуроки пока не добавлены.</p>
+    {% endif %}
+</div>
+
+{# ─────────── МАТЕРИАЛЫ (PDF) ─────────── #}
+<div class="content-card">
+    <h3 class="fw-semibold mb-3">Материалы по теме</h3>
+
+    {% if notebooks %}
+    {% for nb in notebooks %}
+    <div class="material-item">
+        <span class="icon">pdf</span>
+        <div>
+            <div class="fw-semibold">{{ nb.title }}</div>
+            {% if nb.content_url %}
+            <a href="{{ nb.content_url }}" download>скачать</a>
+            {% else %}
+            <em class="text-muted">ссылка не сгенерирована</em>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="text-muted">Нет тетрадей.</p>
+    {% endif %}
+</div>
+
+{# ─────────── ДОМАШНЯЯ РАБОТА ─────────── #}
+<div class="content-card">
+    <h3 class="fw-semibold mb-3">Домашняя работа</h3>
+
+    {% if homework %}
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+            <a href="{% url 'homework:detail' homework.pk %}" class="fw-semibold">Перейти</a><br>
+            <span class="badge-deadline {{ homework.deadline|deadline_color }}">
+                Дедлайн: {{ homework.deadline|date:"d.m.Y" }}
+            </span>
+        </div>
+
+        {% if hw_status == 'выполнено' %}
+        <span class="badge-hw badge-hw-vypolneno">{{ hw_status }}</span>
+        {% elif hw_status == 'в процессе' %}
+        <span class="badge-hw badge-hw-v-processe">{{ hw_status }}</span>
+        {% elif hw_status == 'на проверке' %}
+        <span class="badge-hw badge-hw-na-proverke">{{ hw_status }}</span>
+        {% endif %}
+    </div>
+    {% else %}
+    <p class="text-muted">Домашнее задание ещё не назначено.</p>
+    {% endif %}
+</div>
+{% endblock %}

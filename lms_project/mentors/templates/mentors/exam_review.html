@@ -1,0 +1,128 @@
+{# apps/mentors/templates/mentors/exam_review.html #}
+{% extends "mentors/mentor_base.html" %}
+{% load static %}
+{% load markdown_extras %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/exams.css' %}">
+<link rel="stylesheet" href="{% static 'css/pages/mentors.css' %}">
+{% endblock %}
+
+{% block mentor_page_content %}
+<div class="mentor-task-wrapper">
+
+    <!-- Header row -->
+    <div class="mentor-header-row">
+        <a href="{% url 'mentors:exams' %}" class="mentor-back-btn" title="Назад">
+            <img src="{% static 'image/left.png' %}" alt="← Назад" width="32">
+        </a>
+        <h1 class="mentor-task-title">Экзамен №{{ exam.pk }} — часть 2</h1>
+    </div>
+
+    <!-- Navigation dots -->
+    <nav class="exercise-nav mb-4">
+        <ul class="exercise-index">
+            {% for i in indices %}
+            {% if i == idx %}
+            <li class="current"><strong>{{ i }}</strong></li>
+            {% else %}
+            <li>
+                <a href="{% url 'mentors:exam_review' exam.pk %}?q={{ i }}">{{ i }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+
+    <!-- Main card -->
+    <div class="mentor-task-card">
+        <div class="mentor-task-desc-block">
+
+            <!-- Exercise header -->
+            <div class="mentor-task-ex-header">
+                <span class="mentor-task-ex-number">Упражнение {{ link.order_idx }}</span>
+            </div>
+
+            <!-- Description -->
+            <div class="mentor-task-exercise mb-4">
+                {{ exercise.description|markdown }}
+            </div>
+
+            <!-- Student files -->
+            {% if student_files %}
+            <div class="mentor-task-submission mb-4">
+                <span class="mentor-submission-label">Файлы студента:</span>
+                {% for f in student_files %}
+                <div class="mentor-task-student-file">
+                    <a href="{{ f.content_url }}" download>
+                        <span class="pdf-icon">pdf</span> {{ f.file_name }}
+                    </a>
+                    <a href="{{ f.content_url }}" class="mentor-task-file-link" download>скачать</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Criteria if any -->
+            {% if criteria_url %}
+            <div class="mentor-task-criteria mb-4">
+                <span class="mentor-criteria-label">Критерии оценивания:</span>
+                <img src="{{ criteria_url }}"
+                     alt="Критерии для упражнения №{{ link.order_idx }}"
+                     class="mentor-criteria-img">
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Feedback form -->
+        <form method="post" enctype="multipart/form-data" class="mentor-task-feedback-form">
+            {% csrf_token %}
+            <div class="mentor-task-feedback-fields">
+
+                <!-- Mentor solution file -->
+                <div class="mentor-task-file-row mb-3">
+                    <label for="mentor_file">Ваш файл решения:</label>
+                    <input type="file" name="mentor_file" id="mentor_file">
+                    {% if existing_fb and existing_fb.file_path %}
+                    <span class="mentor-task-feedback-uploaded">
+            <span class="pdf-icon"></span>
+            {% if existing_fb.content_url %}
+              <a href="{{ existing_fb.content_url }}" download>
+                {{ existing_fb.file_path }}
+              </a>
+            {% else %}
+              {{ existing_fb.file_path }}
+            {% endif %}
+          </span>
+                    {% endif %}
+                </div>
+
+                <!-- Grade -->
+                <div class="mentor-task-grade-row mb-3">
+                    <label for="grade">Оценка <span class="mentor-max-score">/ {{ max_score }}</span>:</label>
+                    <input type="number"
+                           name="grade"
+                           id="grade"
+                           min="0" max="{{ max_score }}"
+                           value="{% if existing_fb %}{{ existing_fb.grade }}{% endif %}">
+                </div>
+
+                <!-- Feedback comment -->
+                <div class="mentor-task-comment-row mb-3">
+                    <label for="feedback">Комментарий:</label>
+                    <textarea name="feedback"
+                              id="feedback"
+                              rows="3">{% if existing_fb %}{{ existing_fb.feedback }}{% endif %}</textarea>
+                </div>
+
+            </div>
+
+            <div class="mentor-task-feedback-actions">
+                <button type="submit" class="btn btn-blue">Сохранить результаты</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

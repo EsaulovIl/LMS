@@ -1,0 +1,60 @@
+{# apps/mentors/templates/mentors/check_list.html #}
+{% extends "mentors/mentor_base.html" %}
+{% load static %}
+{% block title %}Проверка домашних заданий{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/exams.css' %}">
+{% endblock %}
+
+{% block page_content %}
+<h1 class="fw-bold mb-4">Проверка домашних заданий</h1>
+
+{# --- Блок 1: В ожидании проверки --- #}
+<h2 class="mb-3">Ожидают проверки</h2>
+{% if pending %}
+<div class="exam-list mb-5">
+    {% for item in pending %}
+    <a href="{% url 'mentors:check_detail' item.pk item.ex_pk %}" class="exam-card">
+        <div class="exam-card__name">
+            {{ item.student.get_full_name }} — {{ item.theme.name }}
+        </div>
+        <span class="badge-hw in-review">ожидает проверки</span>
+    </a>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+<nav class="pagination mb-5">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">&laquo; Назад</a>
+    {% endif %}
+    <span>Стр. {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Вперёд &raquo;</a>
+    {% endif %}
+</nav>
+{% endif %}
+{% else %}
+<p class="text-muted mb-5">Нет заданий в ожидании проверки.</p>
+{% endif %}
+
+{# --- Блок 2: Уже проверенные --- #}
+<h2 class="mb-3">Проверенные</h2>
+{% if reviewed %}
+<div class="exam-list">
+    {% for item in reviewed %}
+    <a href="{% url 'mentors:check_detail' item.pk item.ex_pk %}"
+       class="exam-card exam-card--done">
+        <div class="exam-card__name">
+            {{ item.student.get_full_name }} — {{ item.theme.name }}
+        </div>
+        <span class="badge-hw completed">проверено</span>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-muted">Пока нет проверенных заданий.</p>
+{% endif %}
+{% endblock %}

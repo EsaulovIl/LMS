@@ -1,0 +1,125 @@
+{# apps/mentors/templates/mentors/homework_detail.html #}
+{% extends "mentors/mentor_base.html" %}
+{% load static %}
+{% load markdown_extras %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/exams.css' %}">
+<link rel="stylesheet" href="{% static 'css/pages/mentors.css' %}">
+{% endblock %}
+
+{% block mentor_page_content %}
+<div class="mentor-task-wrapper">
+
+    <div class="mentor-header-row">
+        <a href="{% url 'mentors:check' %}" class="mentor-back-btn" title="Назад">
+            <img src="{% static 'image/left.png' %}" alt="Назад" width="32">
+        </a>
+        <h1 class="mentor-task-title">
+            Задание №{{ homework.pk }}
+        </h1>
+    </div>
+
+    <nav class="exercise-nav">
+        <ul class="exercise-index">
+            {% for ex_id in ex_ids %}
+            {% if ex_id == current_id %}
+            <li class="current"><strong>{{ forloop.counter }}</strong></li>
+            {% else %}
+            <li>
+                <a href="{% url 'mentors:check_detail' homework.pk ex_id %}">{{ forloop.counter }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+
+    <div class="mentor-task-card">
+        <div class="mentor-task-desc-block">
+            <div class="mentor-task-ex-header">
+                <span class="mentor-task-ex-number">Задача {{ current_index|add:"1" }}</span>
+                <span class="mentor-task-ex-id">№{{ exercise.pk }}</span>
+            </div>
+            <div class="mentor-task-exercise">
+                {{ exercise.description|markdown }}
+            </div>
+
+            {% if submission %}
+            <div class="mentor-task-submission">
+                <span class="mentor-submission-label">Ответ студента:</span>
+                {% if submission.answer %}
+                <div class="mentor-task-student-answer">{{ submission.answer }}</div>
+                {% endif %}
+                {% for f in student_files %}
+                <div class="mentor-task-student-file">
+                    <a href="{{ f.content_url }}" download>
+                        <span class="pdf-icon">pdf</span>
+                        {{ f.file_path }}
+                    </a>
+                    <a href="{{ f.content_url }}" class="mentor-task-file-link" download>скачать</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="mentor-task-alert mentor-alert-info">
+                Студент ещё не отправил решение.
+            </div>
+            {% endif %}
+
+            {% if criteria_url %}
+            <div class="mentor-task-criteria">
+                <span class="mentor-criteria-label">Критерии оценивания:</span>
+                <img src="{{ criteria_url }}"
+                     alt="Критерии для задания №{{ exercise.pk }}"
+                     class="mentor-criteria-img">
+            </div>
+            {% endif %}
+        </div>
+
+        <form method="post" enctype="multipart/form-data" class="mentor-task-feedback-form">
+            {% csrf_token %}
+            <div class="mentor-task-feedback-fields">
+                <div class="mentor-task-file-row">
+                    <label for="solution_{{ exercise.pk }}">Файл решения:</label>
+                    <input type="file" name="solution_{{ exercise.pk }}" id="solution_{{ exercise.pk }}">
+                    {% if existing_feedback and existing_feedback.file_path %}
+                    <span class="mentor-task-feedback-uploaded">
+                            <span class="pdf-icon">pdf</span>
+                            {% if existing_feedback.content_url %}
+                                <a href="{{ existing_feedback.content_url }}" download>
+                                    {{ existing_feedback.file_path }}
+                                </a>
+                            {% else %}
+                                {{ existing_feedback.file_path }}
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="mentor-task-grade-row">
+                    <label for="grade_{{ exercise.pk }}">
+                        Оценка <span class="mentor-max-score">/ {{ max_score }}</span>
+                    </label>
+                    <input type="number"
+                           name="grade_{{ exercise.pk }}"
+                           id="grade_{{ exercise.pk }}"
+                           value="{% if existing_feedback %}{{ existing_feedback.grade }}{% endif %}"
+                           min="0" max="{{ max_score }}">
+                </div>
+
+                <div class="mentor-task-comment-row">
+                    <label for="feedback_{{ exercise.pk }}">Комментарий:</label>
+                    <textarea
+                            name="feedback_{{ exercise.pk }}"
+                            id="feedback_{{ exercise.pk }}"
+                            rows="3">{% if existing_feedback %}{{ existing_feedback.feedback }}{% endif %}</textarea>
+                </div>
+            </div>
+            <div class="mentor-task-feedback-actions">
+                <button type="submit" class="btn btn-blue">Сохранить результаты</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
