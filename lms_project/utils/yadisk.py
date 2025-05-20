@@ -7,10 +7,6 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 def get_yadisk_download_link(disk_path: str) -> str:
-    """
-    Запрашиваем у Яндекс.Диска прямую ссылку на скачивание.
-    Не кодируем путь вручную — requests сделает всё правильно.
-    """
     api_url = "https://cloud-api.yandex.net/v1/disk/resources/download"
     headers = {"Authorization": f"OAuth {settings.YANDEX_DISK_TOKEN}"}
     params = {"path": disk_path}
