@@ -1,0 +1,4 @@
+.card.mb-3 {
+  border-radius: 1rem; /* 16px, можно другое значение */
+  border: #EAEDF0;
+}

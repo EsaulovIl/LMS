@@ -116,9 +116,8 @@ def quiz_welcome(request):
 
 @login_required
 def quiz_start(request):
-    # очищаем старые ответы
     TestResponse.objects.filter(user=request.user).delete()
-    return redirect('onboarding:quiz_question', idx=1)
+    return redirect('onboarding:quiz_question', step=1)
 
 
 @login_required

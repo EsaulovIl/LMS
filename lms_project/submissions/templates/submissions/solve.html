@@ -4,6 +4,11 @@
 
 {% block title %}Задача №{{ exercise.pk }}{% endblock %}
 
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/solve.css' %}">
+{% endblock %}
+
 {% block page_content %}
 <div class="d-flex align-items-center mb-3">
     <a href="{% if assignment_type == 'homework' %}

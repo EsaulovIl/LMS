@@ -221,7 +221,7 @@ def exam_results(request, exam_id):
 
         # для test: 1 балл за верный, max=1
         if ex.exercise_type == 'test':
-            earned = 1 if (sub and sub.answer and sub.answer.strip() == ex.correct_answer.strip()) else 0
+            earned = sub.grade if (sub and sub.grade is not None) else 0
             maxp = 1
             part1_points += earned
             part1_max += maxp

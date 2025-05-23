@@ -125,12 +125,13 @@
     background: #fff;
 }
 
-.card.mb-3 {
-  border-radius: 1rem; /* 16px, можно другое значение */
-  border: #EAEDF0;
-}
 
 .card.mb-4 {
   border-radius: 1rem; /* 16px, можно другое значение */
   border: none;
+}
+
+.card-body{
+   border-radius: 14px;
+   border: #ECEFF4;
 }
