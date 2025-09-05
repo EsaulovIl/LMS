@@ -11,7 +11,7 @@ def daily_submit(request):
     if request.method != 'POST':
         return redirect('planning:home')
 
-    today = date(2025, 5, 8)
+    today = date(2025, 5, 23)
     # берём назначение на сегодня
     assignment = get_object_or_404(
         DailyQuizAssignment,

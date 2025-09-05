@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
-from django.db.models import Q
+from django.db.models import Q, F
 
 from submissions.models import Submission, SubmissionFile, SubmissionFeedback
 from submissions.forms import SubmissionFileForm
@@ -54,7 +54,7 @@ def mentor_check_list(request):
         .filter(
             schedule__plan__student__in=student_ids,
             exercises__exercise_type='open',
-            exercises__submissions__student__in=student_ids
+            exercises__submissions__student=F('schedule__plan__student'),
         )
         .distinct()
         .select_related('schedule__plan__student', 'schedule__theme')
@@ -71,7 +71,7 @@ def mentor_check_list(request):
         .distinct()
     )
 
-    reviewed_hw = base_hw.exclude(pk__in=pending_hw.values_list('pk', flat=True))
+    # reviewed_hw = base_hw.exclude(pk__in=pending_hw.values_list('pk', flat=True))
 
     # === Отработки ===
     base_pr = (
@@ -102,11 +102,15 @@ def mentor_check_list(request):
     pending = []
     for hw in pending_hw:
         # первая «открытая» домашка без проверки
-        ex = hw.exercises.through.objects.filter(
+        link = HomeworkExercise.objects.filter(
             homework=hw,
             status=HomeworkExercise.PENDING,
             exercise__exercise_type='open'
-        ).select_related('exercise').first().exercise
+        ).select_related('exercise').first()
+        if not link:
+            # если ничего не нашли — пропускаем эту домашку
+            continue
+        ex = link.exercise
         pending.append({
             'kind': 'homework',
             'pk': hw.pk,
@@ -132,12 +136,20 @@ def mentor_check_list(request):
         })
 
     reviewed = []
+    reviewed_hw = Homework.objects.filter(
+        exercises__submissions__status='graded',
+        schedule__plan__student__in=student_ids
+    ).distinct().select_related('schedule__plan__student', 'schedule__theme')
     for hw in reviewed_hw:
-        ex = hw.exercises.through.objects.filter(
+        # ищем связку HomeworkExercise именно для graded open-упражнения
+        link = HomeworkExercise.objects.filter(
             homework=hw,
             status=HomeworkExercise.GRADED,
             exercise__exercise_type='open'
-        ).select_related('exercise').first().exercise
+        ).select_related('exercise').first()
+        if not link:
+            continue  # у этой домашки нет graded open-упражнений — пропускаем
+        ex = link.exercise
         reviewed.append({
             'kind': 'homework',
             'pk': hw.pk,
@@ -226,7 +238,6 @@ def mentor_homework_detail(request, homework_pk, exercise_pk):
     prev_id = ex_ids[idx - 1] if idx > 0 else None
     next_id = ex_ids[idx + 1] if idx < len(ex_ids) - 1 else None
     current_index = idx  # 0-based
-
 
     # 4) Обработка POST — сохраняем только для этого упражнения
     if request.method == 'POST':

@@ -19,6 +19,7 @@
 }
 .exam-card__name {
     font-weight: 500;
+    text-decoration: none;
 }
 
 .exam-card .exam-card__name a:hover,

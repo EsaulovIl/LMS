@@ -15,7 +15,7 @@ from homework.models import Homework, HomeworkExercise
 
 from exams.models import ExamVariant, StudentExam
 
-# фиксированный «универсальный» порядок разделов
+# Фиксированный «рекомендуемый» порядок разделов
 UNIVERSAL_SECTION_ORDER = [
     6, 7, 9, 4, 5, 10, 11, 2, 8, 12,
     1, 3, 13, 15, 16, 19, 17, 18, 14
@@ -30,7 +30,7 @@ SECTION_WEIGHTS = {
     17: 3, 18: 4, 19: 4
 }
 
-# Шкала первичный → тестовый балл
+# Шкала первичный -> тестовый балл
 PRIMARY_TO_TEST = {
     1: 6, 2: 11, 3: 17, 4: 22, 5: 27,
     6: 34, 7: 40, 8: 46, 9: 52, 10: 58,
@@ -43,7 +43,9 @@ PRIMARY_TO_TEST = {
 
 
 def get_primary_score(desired_test_score: float) -> int:
-    """Мин. первичный балл, при котором тестовый ≥ desired_test_score."""
+    """
+    Минимальный первичный балл, при котором тестовый не меньше желаемого тестового балла.
+    """
     for p, t in sorted(PRIMARY_TO_TEST.items()):
         if t >= desired_test_score:
             return p
@@ -53,12 +55,13 @@ def get_primary_score(desired_test_score: float) -> int:
 @transaction.atomic
 def generate_personal_plan(student_id: int) -> Plan:
     """
+    Генерация персонального плана. Алгоритм работает в следующей последовательности:
     1) Удаляем старый план
-    2) Загружаем анкету и прогресс
+    2) Загружаем результаты анкетирования и тестирования
     3) Отбираем и приоритизируем разделы
     4) Создаём Plan + PlanEntry
-    5) Расписываем темы по дням, домашку – на тот же день
-    6) Создаём пробники: назначаем на последний день каждого месяца
+    5) Расписываем темы по дням с учётом интенсивности указанной в анкете
+    6) Добавляем в расписание пробники: назначаем на последний день каждого месяца
     """
     student = User.objects.get(pk=student_id)
 
@@ -103,7 +106,7 @@ def generate_personal_plan(student_id: int) -> Plan:
         for sid, d in prog.items()
     }
 
-    # 3) PRIMARY → TARGET → отбор разделов
+    # 3) PRIMARY -> TARGET -> отбор разделов
     primary_goal = get_primary_score(target_test)
     selected, cum = [], 0
     for sid in UNIVERSAL_SECTION_ORDER:
@@ -114,7 +117,7 @@ def generate_personal_plan(student_id: int) -> Plan:
         else:
             break
 
-    # 3.1) Приоритизация: want∖know, want∩know, know∖want, low_progress, остальные
+    # 3.1) Приоритизация: хочу изучить, хочу и знаю, знаю, небольшой прогресс по теме, остальные
     low_prog = {sid for sid, pct in progress_pct.items() if pct < 70}
     prioritized = []
 
@@ -147,7 +150,7 @@ def generate_personal_plan(student_id: int) -> Plan:
 
     # 5) Расписание тем «плавно» по темпу ученика
     start_date = date.today()
-    avg_topic_time = 3.0  # часов на тему
+    avg_topic_time = 3.0  # примерное количество часов на тему
     topics_per_week = max(1, weekly_hours / avg_topic_time)
     interval_days = 7.0 / topics_per_week
 
@@ -193,17 +196,18 @@ def generate_personal_plan(student_id: int) -> Plan:
             defaults={'deadline': last_day}
         )
 
-        StudentExam.objects.update_or_create(
+        se, created = StudentExam.objects.get_or_create(
             variant=variant,
             student=student,
-            defaults={
-                'deadline': variant.deadline,
-                # назначаем ровно на последний день месяца
-                'assigned_at': timezone.make_aware(
-                    datetime.combine(last_day, time.min)
-                )
-            }
+            defaults={'deadline': variant.deadline}
         )
+
+        # только если новая запись — сохраняем assigned_at
+        if created:
+            se.assigned_at = timezone.make_aware(
+                datetime.combine(last_day, time.min)
+            )
+            se.save(update_fields=['assigned_at'])
 
         current += relativedelta(months=1)
 

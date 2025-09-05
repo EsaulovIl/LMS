@@ -28,9 +28,9 @@
 }
 
 /* цветовые модификаторы (по ev.type)  – можно расширять при необходимости */
-.event.теория    { background:#D4F8DA; }   /* мягкий зелёный */
+.event.теория    { background:#C0FBD6; }   /* мягкий зелёный */
 .event.домашка  { background:#F7E4A8; }   /* песочный */
-.event.пробник      { background:#CBD7FF; }   /* сиреневый */
+.event.пробник      { background:#BFC5FA; }   /* сиреневый */
 .event.отработка    { background:#F5CDF2; }
 
 /* заголовок задания внутри плитки */

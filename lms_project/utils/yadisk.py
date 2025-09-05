@@ -1,5 +1,3 @@
-# utils/yadisk.py
-
 import logging
 import requests
 from django.conf import settings

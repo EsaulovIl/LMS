@@ -1,4 +1,4 @@
-# apps/submissions/views.py
+# submissions/views.py
 
 from django import forms
 from django.http import Http404

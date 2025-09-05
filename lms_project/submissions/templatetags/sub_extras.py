@@ -1,4 +1,3 @@
-# content/templatetags/sub_extras.py
 from django import template
 register = template.Library()
 @register.filter

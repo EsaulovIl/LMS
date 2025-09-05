@@ -89,7 +89,7 @@ def exam_detail(request, exam_id):
             )
             idx += 1
 
-    # --- инициализируем время старта и лимит ---
+    # инициализируем время старта и лимит
     NOW = timezone.now()
     if se.start_time is None:
         se.start_time = NOW
@@ -115,7 +115,7 @@ def exam_detail(request, exam_id):
         se.save(update_fields=['completed_at'])
         return redirect('exams:list')
 
-    # --- навигация по упражнениям ---
+    # навигация по упражнениям
     total = se.exam_exercises.count()
     try:
         idx = int(request.GET.get('q', 1))
@@ -140,7 +140,7 @@ def exam_detail(request, exam_id):
         }
     )
 
-    # --- обработка сохранения черновика ---
+    # обработка сохранения черновика
     if request.method == 'POST':
         # Сохраняем ответ для test
         if 'save_answer' in request.POST and exercise.exercise_type == 'test':

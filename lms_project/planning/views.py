@@ -23,7 +23,7 @@ def home_view(request):
     if request.user.role.name != 'student':
         return redirect('mentors:home')
     # today = date.today()
-    today = date(2025, 5, 19)
+    today = date(2025, 5, 23)
     # 1) Пытаемся получить уже созданное назначение на сегодня
     assignment = DailyQuizAssignment.objects.filter(
         user=request.user,

@@ -4,24 +4,11 @@
 /* ============================================================= */
 
 
-
-
-
-
-
-
-
-
-
-
-
 .card {
     border-radius: 20px;
     border: 1.5px solid #eceff4;
     box-shadow: none;
 }
-
-
 
 
 .link-blue {
@@ -50,32 +37,6 @@
     height: 34px;
     vertical-align: middle;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* кнопка-иконка из патча */
 .btn-icon {

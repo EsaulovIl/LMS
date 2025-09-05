@@ -1,4 +1,3 @@
-# submissions/templatetags/date_extras.py
 import markdown as _md
 from django import template
 from django.utils.safestring import mark_safe
